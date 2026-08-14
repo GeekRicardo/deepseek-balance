@@ -12,7 +12,7 @@
 #   或下载后本地运行：bash install.sh [--dry-run] [--restart]
 #
 #   --dry-run   只打印将要执行的操作，不写任何文件。
-#   --restart   装完后尝试 `pm2 restart dsh-web`（无 pm2 时仅提示）。
+#   --restart   装完后尝试重启 DSH web（pm2 托管时自动，否则提示手动）。
 #   -h/--help   打印本帮助。
 #
 # 环境变量（均可省略）：DSH_HOME（默认 ~/.dsh）
@@ -29,7 +29,7 @@ deepseek-balance 一键安装脚本
   或：bash install.sh [--dry-run] [--restart]
 
   --dry-run    只打印将要执行的操作，不写任何文件
-  --restart    装完后尝试 `pm2 restart dsh-web`（无 pm2 时仅提示）
+  --restart    装完后尝试重启 DSH web（pm2 托管时自动，否则提示手动）
 
 环境变量（可省略）：DSH_HOME（默认 ~/.dsh）
 EOF
@@ -68,7 +68,7 @@ if [ "$DRY_RUN" = true ]; then
   say "[dry-run] 步骤 2：在 dsh.profile.bundles 追加 \"${PKG}\""
   say "[dry-run] 步骤 3：cd ${PROFILE_DIR} && pnpm install"
   say "[dry-run] 步骤 4：校验 dsh.profile.bundles 含 ${PKG}"
-  [ "$RESTART" = true ] && say "[dry-run] 步骤 5：pm2 restart dsh-web" || say "[dry-run] 步骤 5：提示用户重启 DSH"
+  [ "$RESTART" = true ] && say "[dry-run] 步骤 5：重启 DSH web（pm2 托管时自动，否则提示手动）" || say "[dry-run] 步骤 5：提示用户重启 DSH"
   exit 0
 fi
 
@@ -124,15 +124,14 @@ say "安装完成：${PKG}"
 
 # 步骤 5：重启提示
 if [ "$RESTART" = true ]; then
-  if command -v pm2 >/dev/null 2>&1; then
-    say "重启 dsh-web（pm2）..."
+  if command -v pm2 >/dev/null 2>&1 && pm2 list 2>/dev/null | grep -q "dsh"; then
+    say "检测到 pm2 托管的 dsh，重启 dsh-web..."
     pm2 restart dsh-web || warn "pm2 restart 失败，请手动重启 DSH"
   else
-    warn "未找到 pm2，请手动重启 DSH"
+    warn "未检测到 pm2 托管的 dsh 进程，无法自动重启。"
+    warn "请手动重启：结束 dsh web 进程后重新运行 dsh web。"
   fi
 else
-  say "下一步：重启 DSH 并硬刷新（Cmd/Ctrl+Shift+R）使插件生效。"
-  if command -v pm2 >/dev/null 2>&1; then
-    say "本机可用：pm2 restart dsh-web（会短暂断开当前页面会话）"
-  fi
+  say "下一步：重启 DSH web 并硬刷新（Cmd/Ctrl+Shift+R）使插件生效。"
+  say "pm2 托管：pm2 restart dsh-web；否则：结束 dsh web 进程后重新运行 dsh web。"
 fi
