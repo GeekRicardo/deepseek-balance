@@ -1,0 +1,12 @@
+{
+  "name": "deepseek-balance",
+  "description": "DeepSeek Harness web 插件：状态栏展示 DeepSeek 余额与本会话估算花费",
+  "version": "1.0.0",
+  "entry": {
+    "name": "deepseek-balance",
+    "inject": []
+  },
+  "client": {
+    "platform": "web"
+  }
+}
