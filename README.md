@@ -9,7 +9,20 @@ DeepSeek Harness web 插件：在**输入框下方状态栏**展示当前供应�
 | `deepseek` / `deepseek-official` | DeepSeek 官方 | `● 本会话 ¥X.XX · ● 余额 ¥465.46` | `DEEPSEEK_API_KEY` | `GET api.deepseek.com/user/balance` |
 | `kimi-coding` | Kimi For Coding | `5小时 3% 4h15m · 7天 31% 6d0h · 5分钟前` | `KIMI_CODING_API_KEY`（兼容 `KIMI_CODE_API_KEY`/`KIMI_API_KEY`） | `GET api.kimi.com/coding/v1/usages` |
 | `opencode-go` | OpenCode Go | `5小时 8% 3h · 7天 3% 5d0h · 30天 1% 27d · 5分钟前` | `OPENCODE_GO_API_KEY`（兼容 `OPENCODE_API_KEY`） | `GET opencode.ai/zen/go/v1/usage` |
+| `zai-coding-cn` / `zai` | 智谱 GLM Coding Plan | `5小时 3% 4h15m · 7天 31% 6d0h · 5分钟前` | `ZAI_CODING_CN_API_KEY` / `ZAI_API_KEY` | `GET open.bigmodel.cn 或 api.z.ai/api/monitor/usage/quota/limit` |
+| `minimax-cn` / `minimax` | MiniMax Coding Plan | `5小时 3% 4h15m · 7天 31% 6d0h · 5分钟前` | `MINIMAX_CN_API_KEY` / `MINIMAX_API_KEY` | `GET api.minimaxi.com 或 api.minimax.io/v1/api/openplatform/coding_plan/remains` |
+| `openrouter` | OpenRouter | `● 余额 $8.42` | `OPENROUTER_API_KEY` | `GET openrouter.ai/api/v1/credits` |
+| `openai-codex` | OpenAI Codex（订阅） | `5小时 15% 3h · 7天 30% 4d2h · 5分钟前` | `OPENAI_CODEX_ACCESS_TOKEN`（可选 `OPENAI_CODEX_ACCOUNT_ID`） | `GET chatgpt.com/backend-api/wham/usage` |
 | 其他 provider | — | 不显示（返回 null） | — | — |
+
+> `deepseek` 与 `deepseek-official` 是 DeepSeek 官方的两条 provider 路由（DSH 自带 `dsh-llm-deepseek` 与 pi-ai catalog），余额接口相同，都展示官方余额。
+
+### 为什么不是 cc-switch 的全部供应商
+
+cc-switch 的用量查询实现里，能在 DSH 实际触发的是以上 7 家（pi-ai 有对应 provider id，模型选择器能切到）。以下两类**未接入**：
+
+- **OAuth 订阅类**（Claude / Gemini / Grok）：cc-switch 走各自桌面 OAuth 会话 token（`~/.claude`、`~/.gemini`、Grok session）查询订阅额度，而 DSH 里这些 provider 走 API key 认证，插件拿不到订阅 token，无法干净接入。
+- **pi-ai 无对应 provider**（SiliconFlow / StepFun / Novita / 火山 / ZenMux）：DSH 模型选择器里没有这些 provider id，加了也永远不会触发。
 
 > `deepseek` 与 `deepseek-official` 是 DeepSeek 官方的两条 provider 路由（DSH 自带 `dsh-llm-deepseek` 与 pi-ai catalog），余额接口相同，都展示官方余额。
 
