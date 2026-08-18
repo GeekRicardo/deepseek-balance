@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # =============================================================================
-# deepseek-balance 一键安装脚本（macOS / Linux / Windows Git Bash）
+# dsh-balance 一键安装脚本（macOS / Linux / Windows Git Bash）
 #
 # 包只在 GitHub、不发 npm，因此本脚本直接把 github 依赖写进 profile 的
 # package.json（dependencies + dsh.profile.bundles），再 pnpm install 拉取。
 # 下次启动 DSH 时 profile boot 会读取包内 cordis.patch.yml 自动挂载插件行。
 #
 # 用法：
-#   curl -fsSL https://raw.githubusercontent.com/GeekRicardo/deepseek-balance/main/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/GeekRicardo/dsh-balance/main/install.sh | bash
 #
 #   或下载后本地运行：bash install.sh [--dry-run] [--restart]
 #
@@ -22,10 +22,10 @@ set -euo pipefail
 for arg in "$@"; do
   if [ "$arg" = "-h" ] || [ "$arg" = "--help" ]; then
     cat <<'EOF'
-deepseek-balance 一键安装脚本
+dsh-balance 一键安装脚本
 
 用法：
-  curl -fsSL https://raw.githubusercontent.com/GeekRicardo/deepseek-balance/main/install.sh | bash
+  curl -fsSL https://raw.githubusercontent.com/GeekRicardo/dsh-balance/main/install.sh | bash
   或：bash install.sh [--dry-run] [--restart]
 
   --dry-run    只打印将要执行的操作，不写任何文件
@@ -40,8 +40,8 @@ done
 DSH_HOME="${DSH_HOME:-${HOME:-${USERPROFILE:-}}/.dsh}"
 PROFILE_DIR="$DSH_HOME/profiles/web"
 PKG_JSON="$PROFILE_DIR/package.json"
-PKG="deepseek-balance"
-GH_DEP="github:GeekRicardo/deepseek-balance"
+PKG="dsh-balance"
+GH_DEP="github:GeekRicardo/dsh-balance"
 
 DRY_RUN=false
 RESTART=false
@@ -116,7 +116,7 @@ if ! node -e '
   const bundles = p.dsh?.profile?.bundles ?? [];
   process.exit(bundles.includes(process.argv[2]) ? 0 : 1);
 ' "$PKG_JSON" "$PKG"; then
-  die "deepseek-balance 未出现在 dsh.profile.bundles 中，挂载未注册，请检查 pnpm install 输出。"
+  die "dsh-balance 未出现在 dsh.profile.bundles 中，挂载未注册，请检查 pnpm install 输出。"
 fi
 say "bundle 已注册：dsh.profile.bundles 包含 ${PKG}（下次启动自动挂载）"
 
