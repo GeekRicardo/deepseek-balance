@@ -6,6 +6,7 @@ DeepSeek Harness web 插件：在**输入框下方状态栏**展示当前供应�
 | --- | --- | --- |
 | `deepseek`（DeepSeek 官方） | `● 本会话 ¥X.XX · ● 余额 ¥465.xx` | `DEEPSEEK_API_KEY` → `GET api.deepseek.com/user/balance` |
 | `kimi-coding`（Kimi For Coding） | `5小时 3% 4h15m · 7天 31% 6d0h · 5分钟前` | `KIMI_CODING_API_KEY` → `GET api.kimi.com/coding/v1/usages` |
+| `opencode-go`（OpenCode Go） | `5小时 2% 3h50m · 7天 9% 4d2h · 30天 26% 22d1h · 5分钟前` | `OPENCODE_GO_API_KEY` → `GET opencode.ai/zen/go/v1/usage` |
 | 其他 provider | 不显示（返回 null） | — |
 
 ## 实时性（v2+ 优化）
@@ -49,6 +50,7 @@ pm2 restart dsh-web   # 若用 pm2 托管；否则用你的启动方式重启
 - `~/.dsh/.credentials.yaml` 里配置对应供应商的密钥：
   - DeepSeek：`DEEPSEEK_API_KEY`
   - Kimi Coding：`KIMI_CODING_API_KEY`（也兼容 `KIMI_CODE_API_KEY` / `KIMI_API_KEY`，可选 `KIMI_CODE_BASE_URL` 覆盖）
+  - OpenCode Go：`OPENCODE_GO_API_KEY`（也兼容 `OPENCODE_API_KEY`）
 - Node.js ≥ 20、pnpm 可用。
 
 ## 工作原理
@@ -69,6 +71,13 @@ pm2 restart dsh-web   # 若用 pm2 托管；否则用你的启动方式重启
 - Kimi Code 是订阅制，「余额」= 每周请求配额与 5 小时滚动窗口的已用百分比，接口不返回金额。
 - 展示格式对齐 [cc-switch](https://github.com/GeekRicardo/cc-switch) 的 `SubscriptionQuotaFooter`：`5小时 X% 倒计时 · 7天 Y% 倒计时 · N分钟前`，百分比 <70% 绿 / 70-90% 橙 / ≥90% 红。
 - 仅当 provider 为 `kimi-coding`（`api.kimi.com/coding`）时展示；通过 opencode-go 等网关跑的 kimi 模型不属于此账户，不展示。
+
+### OpenCode Go 用量口径（重要）
+
+- OpenCode Go 是 $10/月订阅，官方配额：5 小时 = $12、每周 = $30、每月 = $60；接口只给已用百分比与重置时间，金额为按配额换算的估算（`percent/100 × 配额`）。
+- 展示 `5小时 X% 倒计时 · 7天 Y% 倒计时 · 30天 Z% 倒计时 · N分钟前`，颜色阈值同上。
+- 接口要求同时携带 `Authorization: Bearer` 与 `x-api-key` 两个请求头（对齐 [OpenCodeMonitor](https://github.com/Hanfei1224/OpenCodeMonitor) 的官方用量接口实现）。
+- 仅当 provider 为 `opencode-go`（`opencode.ai/zen/go`）时展示。
 
 ## License
 
