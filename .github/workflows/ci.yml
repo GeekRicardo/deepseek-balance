@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Syntax check host/client
+        run: |
+          node --check lib/index.js
+          node --check lib/client.js
+      - name: Manifest JSON valid
+        run: |
+          node -e 'JSON.parse(require("fs").readFileSync("package.json","utf8")); JSON.parse(require("fs").readFileSync("dsh.plugin.json","utf8"))'
+      - name: Install script syntax
+        run: bash -n install.sh
+      - name: Bundle patch parses
+        run: grep -q "id: dsh-balance" cordis.patch.yml
