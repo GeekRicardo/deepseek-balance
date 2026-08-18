@@ -1,7 +1,7 @@
 {
   "name": "deepseek-balance",
   "version": "1.0.0",
-  "description": "DeepSeek Harness web 插件：在输入框下方状态栏展示 DeepSeek 官方账户余额与本会话估算花费（token × models.dev 实时单价），并区分非 DeepSeek 模型。",
+  "description": "DeepSeek Harness web 插件：输入框下方状态栏展示当前供应商的余额/用量 —— DeepSeek 官方账户余额 + 本会话估算花费，或 Kimi Coding 订阅用量（5小时/7天/刷新时间）。按 provider 判断、2 秒轮询实时切换。",
   "type": "module",
   "main": "lib/index.js",
   "exports": {
