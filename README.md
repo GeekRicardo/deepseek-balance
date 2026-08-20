@@ -6,7 +6,7 @@ DeepSeek Harness web 插件：在**输入框下方状态栏**展示当前供应�
 
 | provider | 供应商 | 展示内容 | 密钥 | 接口 |
 | --- | --- | --- | --- | --- |
-| `deepseek` / `deepseek-official` | DeepSeek 官方 | `● 本会话 ¥X.XX · ● 余额 ¥465.46` | `DEEPSEEK_API_KEY` | `GET api.deepseek.com/user/balance` |
+| `deepseek` / `deepseek-official` / `deepseek-vision` | DeepSeek 官方（含 dsh-vision-router 的“DeepSeek+视觉” wrapper） | `● 本会话 ¥X.XX · ● 余额 ¥465.46` | `DEEPSEEK_API_KEY` | `GET api.deepseek.com/user/balance` |
 | `kimi-coding` | Kimi For Coding | `5小时 3% 4h15m · 7天 31% 6d0h · 5分钟前` | `KIMI_CODING_API_KEY`（兼容 `KIMI_CODE_API_KEY`/`KIMI_API_KEY`） | `GET api.kimi.com/coding/v1/usages` |
 | `opencode-go` | OpenCode Go | `5小时 8% 3h · 7天 3% 5d0h · 30天 1% 27d · 5分钟前` | `OPENCODE_GO_API_KEY`（兼容 `OPENCODE_API_KEY`） | `GET opencode.ai/zen/go/v1/usage` |
 | `zai-coding-cn` / `zai` | 智谱 GLM Coding Plan | `5小时 3% 4h15m · 7天 31% 6d0h · 5分钟前` | `ZAI_CODING_CN_API_KEY` / `ZAI_API_KEY` | `GET open.bigmodel.cn 或 api.z.ai/api/monitor/usage/quota/limit` |
